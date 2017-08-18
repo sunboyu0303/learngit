@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jmq="http://code.jd.com/schema/jmq"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.jd.com/schema/jmq
+	    http://code.jd.com/schema/jmq/jmq-1.0.xsd">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:conf/mq.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <jmq:transport address="${jmq.address}" user="${jmq.user}" password="${jmq.password}" app="${jmq.consumer.app}"
+                   epoll="${jmq.epoll}"/>
+
+    <!-- pullTimeout must bigger than longPull !!!!!!! -->
+    <jmq:consumer id="consumer" transport="jmq.transport" longPull="10000" pullTimeout="11000" autoStart="true">
+        <jmq:listener topic="${jmq.consumer.topic}" listener="messageListener" maxConcurrent="10" minConcurrent="5"/>
+    </jmq:consumer>
+</beans>
