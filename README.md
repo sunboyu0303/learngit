@@ -10,3 +10,4 @@ issue-101
 
 test stash
 
+glone add commit push
